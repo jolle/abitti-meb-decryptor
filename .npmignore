@@ -1,0 +1,12 @@
+src
+*.zip
+nsa
+node_modules
+*.log
+.DS_Store
+questions*
+example*
+__tests__
+jest.config.js
+tsconfig.json
+*.pem
