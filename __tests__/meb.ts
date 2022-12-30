@@ -1,23 +1,25 @@
-import { join } from 'path';
-import { readFileSync } from 'fs';
-import { decryptMeb } from '../src';
+import { join } from "path";
+import { readFileSync } from "fs";
+import { decryptExamFile, FilesWithExamJson } from "../src";
 
-const PASSWORD = 'syyssade kumaruus tyvivesa uurros';
+const PASSWORD = "syyssade kumaruus tyvivesa uurros";
 
-describe('MEB', () => {
-  it('decrypts a MEB file successfully', async () => {
-    const output = await decryptMeb(
-      readFileSync(join(__dirname, 'exam_Uusi_koe_mex.meb')),
+describe("MEB", () => {
+  it("decrypts a MEB file successfully", async () => {
+    const output = await decryptExamFile(
+      readFileSync(join(__dirname, "exam_Uusi_koe_mex.meb")),
       PASSWORD
     );
 
-    expect(output).toHaveProperty('exam');
-    expect(output).toHaveProperty('files');
+    expect("exam.json" in output).toBe(true);
 
-    expect(output.exam.password).toBe(PASSWORD);
-    expect(output.exam.content.title).toBe('Uusi koe');
+    const examWithJson = output as FilesWithExamJson;
 
-    expect(output.files['exam.json']).toBeInstanceOf(Buffer);
-    expect(output.files['nsa.zip']).toBeInstanceOf(Buffer);
+    expect(examWithJson["exam.json"]).toBeInstanceOf(Buffer);
+    expect(examWithJson["nsa.zip"]).toBeInstanceOf(Buffer);
+
+    const parsedExam = JSON.parse(examWithJson["exam.json"].toString());
+
+    expect(parsedExam.password).toBe(PASSWORD);
   });
 });
