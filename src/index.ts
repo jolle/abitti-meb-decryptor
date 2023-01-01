@@ -102,7 +102,7 @@ export const decryptExamFileRaw = async (
   const files = await readZip(encryptedFile);
 
   if (signaturePublicKey) {
-    for (let fileName in files) {
+    for (const fileName in files) {
       if (fileName.endsWith(".sig")) continue;
 
       const signature = files[`${fileName}.sig`];
